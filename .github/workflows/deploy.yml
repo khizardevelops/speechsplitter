@@ -1,0 +1,55 @@
+# Deploy the web app to GitHub Pages.
+#
+# The deployable is nothing but files: the app is fully client-side and the
+# analysis runs in the visitor's *local* service — the HTTPS page can reach
+# http://localhost:8787 because browsers exempt localhost from mixed-content
+# blocking. So "deploying LangChunk" means hosting the static frontend and
+# nothing else; a visitor without the service sees the dialog explaining how to
+# start it, which is the ordinary first-run state.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      # A project site serves under /<repo>/, and SvelteKit needs to know at
+      # build time. Derived from the repo name so a fork deploys unmodified.
+      - name: Build
+        run: BASE_PATH="/${GITHUB_REPOSITORY#*/}" bun run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

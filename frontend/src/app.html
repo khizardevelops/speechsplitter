@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<!-- `viewport-fit=cover` is what makes env(safe-area-inset-*) report real
+		     numbers, which is where Konsta's `safe-areas` padding comes from. -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<meta name="text-scale" content="scale" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-title" content="LangChunk" />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f6f8" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1c1e" />
+		<!--
+			Which skin and how dark, decided before the first paint.
+
+			Konsta hangs every dark style off a `dark` class rather than the media
+			query, and the two shells paint different body backgrounds, so a page that
+			works this out after hydration flashes the wrong one. The logic is
+			duplicated from `appearance.svelte.ts` on purpose: this has to run inline,
+			ahead of the bundle, and the module is what keeps it honest afterwards.
+		-->
+		<script>
+			(() => {
+				const read = (key, allowed, fallback) => {
+					try {
+						const stored = localStorage.getItem(key);
+						return allowed.includes(stored) ? stored : fallback;
+					} catch {
+						return fallback;
+					}
+				};
+				const root = document.documentElement;
+				const theme = read('langchunk.theme', ['system', 'light', 'dark'], 'system');
+				const layout = read('langchunk.layout', ['auto', 'desktop', 'mobile'], 'auto');
+				const dark =
+					theme === 'system' ? window.matchMedia('(prefers-color-scheme: dark)').matches : theme === 'dark';
+				const desktop =
+					layout === 'auto' ? window.matchMedia('(min-width: 1000px)').matches : layout === 'desktop';
+				root.classList.toggle('dark', dark);
+				root.dataset.shell = desktop ? 'desktop' : 'mobile';
+			})();
+		</script>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

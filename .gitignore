@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+*.log
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+.venv-stanza/
+.cache/
+
+# Built language packs (publish these to a static host)
+dist-packs/
+
+# User-installed language plugin packs (runtime state; the versioned samples
+# live in the engine repo). Anchored to the root on purpose.
+/language-packs/

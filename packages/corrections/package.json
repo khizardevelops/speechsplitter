@@ -1,0 +1,26 @@
+{
+  "name": "@langchunk/corrections",
+  "version": "4.0.0",
+  "description": "The human correction loop (§11.6): flag a wrong parse, triage it, turn it into a candidate fixture.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  },
+  "dependencies": {
+    "langchunk": "^0.1.0"
+  }
+}

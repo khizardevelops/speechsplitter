@@ -1,0 +1,23 @@
+# The application workspace. The analysis engine is NOT here — it is the
+# `langchunk` npm package (github.com/khizardevelops/langchunk), consumed like
+# any other dependency.
+#
+#   apps/*        deployable things: the local service, the CLI, the TUI
+#   packages/*    app-side libraries: pack manifests, the correction loop
+#   frontend/     the web app — bun, deliberately OUTSIDE this workspace
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# Which dependencies may run install scripts (pnpm blocks them by default).
+# esbuild links its platform binary — vitest is unusable without it — and
+# onnxruntime-node ships its native runtime. protobufjs and sharp arrive
+# transitively and work from their prebuilt files, so their scripts stay off.
+allowBuilds:
+  esbuild: true
+  onnxruntime-node: true
+  protobufjs: false
+  sharp: false
+
+minimumReleaseAgeExclude:
+  - langchunk@0.1.0

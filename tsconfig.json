@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/packs" },
+    { "path": "./packages/corrections" },
+    { "path": "./apps/cli" },
+    { "path": "./apps/tui" },
+    { "path": "./apps/server" }
+  ]
+}

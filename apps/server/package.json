@@ -1,0 +1,29 @@
+{
+  "name": "@langchunk/server",
+  "version": "4.1.0",
+  "description": "Local HTTP service: pack registry, installation, and analysis.",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "langchunk-server": "./dist/server.js"
+  },
+  "main": "./dist/server.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "langchunk": "^0.1.0",
+    "@huggingface/transformers": "^4.2.0",
+    "onnxruntime-node": "^1.20.0",
+    "@langchunk/corrections": "workspace:*",
+    "@langchunk/packs": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  }
+}

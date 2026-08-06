@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  workspace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # The mirror suite checks the frontend's hand-copied files against the
+      # published langchunk package by behaviour, and it skips unless the
+      # frontend tree has been synced. Sync it so the guard runs for real.
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Sync the frontend tree
+        run: bun install --frozen-lockfile
+        working-directory: frontend
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        run: pnpm test
+
+  # The web app is installed with bun, deliberately outside the pnpm
+  # workspace, so it gets its own job rather than a step above.
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      - name: Svelte check
+        run: bun run check
+
+      - name: Unit tests
+        run: bunx vitest run --project server
+
+      - name: Install Playwright
+        run: bunx playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: bunx playwright test

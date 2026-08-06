@@ -1,0 +1,129 @@
+@import 'tailwindcss';
+@import 'konsta/svelte/theme.css';
+
+/*
+	No `@tailwindcss/forms`. Its base layer puts a border, a background and a
+	fixed padding on every input, select and textarea — the same elements Konsta
+	styles itself — so the two fought and the form controls came out looking like
+	a plain web form sitting inside an iOS list.
+*/
+
+/*
+	Two layouts, one theme.
+
+	The wide layout and the single-column one are the same Konsta iOS components
+	at the same sizes in the same colours — only the arrangement differs. Nothing
+	below re-skins a shell; what is here is the handful of values that carry
+	*meaning* rather than platform convention, so that a noun phrase or a
+	low-confidence clause looks the same in both.
+
+	`light-dark()` is not used: the theme can be pinned by hand, so the switch has
+	to hang off the `dark` class the app controls, not off the OS preference.
+*/
+
+:root {
+	color-scheme: light;
+
+	--accent: #0a6cff;
+	--accent-strong: #0057db;
+	--positive: #1d9a3f;
+	--caution: #c47700;
+	--danger: #d93025;
+
+	/* Clause types — the colour of the rule beside a clause. */
+	--clause-independent: #22a04a;
+	--clause-coordinated: #0a6cff;
+	--clause-dependent: #e08a00;
+	--clause-unknown: #8e8e93;
+
+	/* Phrase types — chip fill and text, at both ends of the theme. */
+	--phrase-np-bg: rgba(10, 108, 255, 0.13);
+	--phrase-np-fg: #0a5ccc;
+	--phrase-vp-bg: rgba(34, 160, 74, 0.16);
+	--phrase-vp-fg: #1a7f39;
+	--phrase-pp-bg: rgba(224, 138, 0, 0.18);
+	--phrase-pp-fg: #a86400;
+	--phrase-adjp-bg: rgba(175, 82, 222, 0.16);
+	--phrase-adjp-fg: #8a3cb5;
+	--phrase-advp-bg: rgba(88, 86, 214, 0.16);
+	--phrase-advp-fg: #4442b8;
+	--phrase-other-bg: rgba(0, 0, 0, 0.07);
+	--phrase-other-fg: rgba(0, 0, 0, 0.66);
+
+	/* Konsta reads its iOS tint from these, so one accent drives every control. */
+	--k-color-primary: var(--accent);
+	--k-color-ios-primary: var(--accent);
+	--k-color-ios-primary-shade: var(--accent-strong);
+	--k-color-ios-primary-tint: var(--accent-strong);
+}
+
+:root.dark {
+	color-scheme: dark;
+
+	--accent: #0a84ff;
+	--accent-strong: #409cff;
+	--positive: #32d158;
+	--caution: #ff9f0a;
+	--danger: #ff453a;
+
+	--clause-independent: #32d158;
+	--clause-coordinated: #0a84ff;
+	--clause-dependent: #ff9f0a;
+	--clause-unknown: #98989d;
+
+	--phrase-np-bg: rgba(10, 132, 255, 0.22);
+	--phrase-np-fg: #7cbcff;
+	--phrase-vp-bg: rgba(50, 209, 88, 0.2);
+	--phrase-vp-fg: #6fe08c;
+	--phrase-pp-bg: rgba(255, 159, 10, 0.2);
+	--phrase-pp-fg: #ffc266;
+	--phrase-adjp-bg: rgba(191, 90, 242, 0.22);
+	--phrase-adjp-fg: #d9a3f5;
+	--phrase-advp-bg: rgba(125, 122, 255, 0.22);
+	--phrase-advp-fg: #aeadf5;
+	--phrase-other-bg: rgba(255, 255, 255, 0.12);
+	--phrase-other-fg: rgba(255, 255, 255, 0.72);
+}
+
+@layer base {
+	html,
+	body {
+		height: 100%;
+	}
+
+	/*
+		The single-column layout is a panel on a backdrop once the window is wider
+		than the column — the only place the body itself is ever visible. The wide
+		layout fills the window, so its Pages paint over the body entirely and it
+		needs nothing here.
+	*/
+	:root[data-shell='mobile'] body {
+		background-color: #d5d5da;
+	}
+
+	:root[data-shell='mobile'].dark body {
+		background-color: #131315;
+	}
+
+	/*
+		Keyboard focus is visible everywhere; pointer focus is not. Konsta clears
+		the browser default on its controls, so this is what a ring looks like
+		across both layouts.
+	*/
+	:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+			scroll-behavior: auto !important;
+		}
+	}
+}
