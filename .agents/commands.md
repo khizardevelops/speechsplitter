@@ -1,10 +1,12 @@
 # LangChunk App — Commands
 
-pnpm for the workspace, bun for `frontend/`. Node 22.
+Two self-contained trees: `backend/` is pnpm, `frontend/` is bun. Node 22.
+**All pnpm commands run from `backend/`** — the repo root holds no workspace.
 
 ## Everyday
 
 ```bash
+cd backend
 pnpm install
 pnpm run verify            # typecheck + workspace tests (incl. mirror suite)
 pnpm run build             # tsc -b across the workspace
@@ -26,6 +28,7 @@ python3 -m venv --system-site-packages .venv-stanza
 venv is ~3 GB instead of 67 MB.
 
 ```bash
+cd backend
 pnpm run build
 pnpm run langchunk doctor                                  # check the bridge
 pnpm run langchunk parse --lang en --format outline f.txt
@@ -40,7 +43,7 @@ inputs: the first takes ~5 s, the rest ~100 ms. Prefer it for exploring.
 ## The web app
 
 ```bash
-pnpm run server                  # the local service on :8787, in another shell
+cd backend && pnpm run server    # the local service on :8787, in another shell
 cd frontend
 bun install
 bun run dev                      # :5173
@@ -55,14 +58,14 @@ running server.
 
 ## Language plugin packs
 
-A pack is a JSON file in `language-packs/` (gitignored runtime state; the
-versioned samples live in the engine repo under `samples/language-packs/`).
+A pack is a JSON file in `backend/language-packs/` (gitignored runtime state;
+the versioned samples live in the engine repo under `samples/language-packs/`).
 `LANGCHUNK_LANG_PACKS=/some/dir` points elsewhere.
 
 ## The correction loop
 
 ```bash
-pnpm run server
+cd backend && pnpm run server
 curl -s localhost:8787/api/corrections | jq .summary
 ```
 
@@ -73,6 +76,7 @@ skeleton whose expected output is deliberately blank.
 ## Upgrading the engine
 
 ```bash
+cd backend
 pnpm update langchunk --latest   # or edit the range in each package.json
 pnpm run verify
 ```

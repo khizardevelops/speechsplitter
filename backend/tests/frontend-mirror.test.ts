@@ -36,7 +36,7 @@ import { AWKWARD, documentFrom, ENGLISH, RUSSIAN } from "./fixtures.js";
  * sync artifact, not on convenience.
  */
 const FRONTEND_SYNCED = existsSync(
-  fileURLToPath(new URL("../frontend/.svelte-kit/tsconfig.json", import.meta.url)),
+  fileURLToPath(new URL("../../frontend/.svelte-kit/tsconfig.json", import.meta.url)),
 );
 
 interface Mirror {
@@ -50,8 +50,8 @@ let mirror: Mirror;
 
 beforeAll(async () => {
   if (!FRONTEND_SYNCED) return;
-  const csv = await import("../frontend/src/lib/langchunk/csv.js");
-  const jsonl = await import("../frontend/src/lib/langchunk/jsonl.js");
+  const csv = await import("../../frontend/src/lib/langchunk/csv.js");
+  const jsonl = await import("../../frontend/src/lib/langchunk/jsonl.js");
   mirror = {
     csvFilename: csv.csvFilename,
     toCsv: csv.toCsv,
@@ -106,7 +106,7 @@ describe.skipIf(!FRONTEND_SYNCED)("frontend/src/lib/langchunk/csv.ts mirrors lan
     // The test can only catch drift that has already happened. The header is
     // what stops someone editing the copy in the first place.
     const source = readFileSync(
-      fileURLToPath(new URL("../frontend/src/lib/langchunk/csv.ts", import.meta.url)),
+      fileURLToPath(new URL("../../frontend/src/lib/langchunk/csv.ts", import.meta.url)),
       "utf8",
     );
     expect(source).toMatch(/MIRROR of `packages\/export\/src\/csv\.ts`/);
@@ -127,7 +127,7 @@ describe.skipIf(!FRONTEND_SYNCED)("frontend/src/lib/langchunk/jsonl.ts mirrors l
 
   it("says in its own header that it is a mirror", () => {
     const source = readFileSync(
-      fileURLToPath(new URL("../frontend/src/lib/langchunk/jsonl.ts", import.meta.url)),
+      fileURLToPath(new URL("../../frontend/src/lib/langchunk/jsonl.ts", import.meta.url)),
       "utf8",
     );
     expect(source).toMatch(/MIRROR of `packages\/export\/src\/jsonl\.ts`/);
@@ -205,7 +205,7 @@ describe("frontend/src/lib/langchunk/types.ts mirrors langchunk/schema", () => {
   }
 
   const schema = interfaces(schemaDeclarations());
-  const mirror = interfaces(read("../frontend/src/lib/langchunk/types.ts"));
+  const mirror = interfaces(read("../../frontend/src/lib/langchunk/types.ts"));
 
   for (const name of ["LangWord", "LangPhrase", "LangClause", "LangSentence", "Confidence", "Span"]) {
     it(`${name} has the same fields on both sides`, () => {
@@ -220,7 +220,7 @@ describe("frontend/src/lib/langchunk/types.ts mirrors langchunk/schema", () => {
     // Either quote style: the frontend's formatter prefers single, and that is
     // a difference in appearance rather than in contract.
     const version = /schemaVersion:\s*['"]([\d.]+)['"]/;
-    const declared = version.exec(read("../frontend/src/lib/langchunk/types.ts"))?.[1];
+    const declared = version.exec(read("../../frontend/src/lib/langchunk/types.ts"))?.[1];
     expect(declared).toBe(SCHEMA_VERSION);
     expect(declared).toBeDefined();
   });

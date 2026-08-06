@@ -16,7 +16,13 @@ here predates the split and is battle-tested — only the plumbing is new:
   `onnxruntime-node` + `@huggingface/transformers` themselves: the engine
   lists them as optional peers so plain consumers don't download a 100 MB
   runtime.
-- `tests/frontend-mirror.test.ts` guards the frontend's three hand-copies
+- **Two top-level trees** (restructured 2026-08-06, same day): `frontend/`
+  (bun) and `backend/` (the entire pnpm workspace — apps, packages, tests,
+  configs, `.venv-stanza`, `language-packs/`). The repo root is an umbrella:
+  README, LICENSE, `.github/`, `.agents/`. All pnpm commands run from
+  `backend/`; the only seam between the trees is HTTP on :8787 plus the three
+  mirror-checked file copies.
+- `backend/tests/frontend-mirror.test.ts` guards the frontend's three hand-copies
   (`csv.ts`, `jsonl.ts`, `types.ts`) against the **installed** package —
   behaviour-compared for the exporters; field-name-compared against the
   bundled `.d.ts` (found by content, its chunk name is hashed) plus

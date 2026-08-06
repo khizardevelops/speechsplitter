@@ -1,7 +1,7 @@
 {
-  "name": "langchunk-app",
+  "name": "langchunk-backend",
   "version": "1.0.0",
-  "description": "The LangChunk application: web app, local analysis service, CLI and TUI over the langchunk engine",
+  "description": "The LangChunk backend: local analysis service, CLI and TUI over the langchunk engine",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@11.18.0",

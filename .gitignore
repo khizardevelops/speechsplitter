@@ -30,5 +30,5 @@ Thumbs.db
 dist-packs/
 
 # User-installed language plugin packs (runtime state; the versioned samples
-# live in the engine repo). Anchored to the root on purpose.
-/language-packs/
+# live in the engine repo). Anchored on purpose.
+/backend/language-packs/

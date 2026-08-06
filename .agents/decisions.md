@@ -47,3 +47,17 @@ a fork deploys unmodified). Analysis happens in the visitor's local service —
 localhost is exempt from mixed-content blocking. No cloud inference. The
 in-browser engine idea is explored and recorded engine-side; it lost on
 accuracy and stays parked until a browser-runnable model measures better.
+
+## A5. Two top-level trees: frontend/ and backend/
+
+2026-08-06, owner: *"make the structure of the langchunk-app different so that
+it makes more sense, separation of concerns, and insulation and modularity.
+like a frontend / backend folder approach."* The pnpm workspace moved whole
+into `backend/` — package.json, lockfile, tsconfigs, vitest config, tests,
+`.venv-stanza`, `language-packs/` — leaving the repo root as an umbrella
+(README, LICENSE, `.github/`, `.agents/`). Each tree installs independently
+with its own package manager; neither imports from the other; the seams are
+HTTP on :8787 and the three mirror-checked copies. All pnpm commands run from
+`backend/`. CI's backend job sets `working-directory: backend` (and
+pnpm/action-setup needs `package_json_file`, setup-node needs
+`cache-dependency-path`, both pointing there).
