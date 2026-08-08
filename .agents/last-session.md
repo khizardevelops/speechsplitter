@@ -14,8 +14,8 @@ published 0.1.0); everything application moved here.
 - The full AGPL-3.0 license remains the application license. Package imports
   remain `langchunk`, which is the separate MIT engine.
 - Backend verification (49 tests), frontend Svelte checks, and the new CLI
-  help surface passed. GitHub-side rename and any push remain owner actions
-  because this environment has no GitHub authentication.
+  help surface passed. The rename already exists on GitHub and commit `5d65b51`
+  (`Rename application to speechsplitter`) was pushed to `origin/main`.
 
 ## Subsequent diagnostic
 
