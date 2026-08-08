@@ -2,92 +2,38 @@
 
 ## Current status
 
-Renamed locally to **speechsplitter** on 2026-08-08. This AGPL-3.0-only
-repository is the application; `langchunk` remains its separate MIT npm
-dependency. Its local `origin` targets `khizardevelops/speechsplitter` pending
-the owner-authenticated GitHub repository rename.
-
-Created 2026-08-06 by splitting the original monorepo (engine repo decision
-§V4-71): the engine stayed at github.com/khizardevelops/langchunk and ships as
-the npm package `langchunk`; this repo holds everything application. All code
-here predates the split and is battle-tested — only the plumbing is new:
-
-- Engine imports rewritten from `@langchunk/X` workspace specifiers to
-  `langchunk/X` subpaths (`analyzer-stanza` → `langchunk/analyzers/stanza`,
-  `schema/validators` → `langchunk/validators`).
-- `@langchunk/packs` and `@langchunk/corrections` remain **local** workspace
-  packages — private, never published; their scoped names are historical.
-- Apps that use the ONNX analyzer (server, cli, tui) declare
-  `onnxruntime-node` + `@huggingface/transformers` themselves: the engine
-  lists them as optional peers so plain consumers don't download a 100 MB
-  runtime.
-- **Two top-level trees** (restructured 2026-08-06, same day): `frontend/`
-  (bun) and `backend/` (the entire pnpm workspace — apps, packages, tests,
-  configs, `.venv-stanza`, `language-packs/`). The repo root is an umbrella:
-  README, LICENSE, `.github/`, `.agents/`. All pnpm commands run from
-  `backend/`; the only seam between the trees is HTTP on :8787 plus the three
-  mirror-checked file copies.
-- `backend/tests/frontend-mirror.test.ts` guards the frontend's three hand-copies
-  (`csv.ts`, `jsonl.ts`, `types.ts`) against the **installed** package —
-  behaviour-compared for the exporters; field-name-compared against the
-  bundled `.d.ts` (found by content, its chunk name is hashed) plus
-  `SCHEMA_VERSION` for the schema. CSV/JSONL checks skip unless
-  `frontend/.svelte-kit/` exists; CI syncs the tree so they run for real.
-
-## The frontend is two layouts over one set of components
-
-One design system — Konsta's iOS theme — and two arrangements chosen by window
-width, with an Automatic/Desktop/Mobile pin in Settings:
+SpeechSplitter is the AGPL local-first application. It consumes the published
+MIT `langchunk` package for Tier 2 grammar parsing, while its backend owns the
+production Tier 1 runtime implementations and raw-text pipeline.
 
 ```
-frontend/src/lib/
-  components/     every visible piece, shared verbatim by both layouts
-  desktop/DesktopApp.svelte   two Konsta Pages side by side: library + detail
-  mobile/MobileApp.svelte     one scrolling Page
-  langchunk/session.svelte.ts all state and actions, shared by both
-  langchunk/outline.ts        ParsedDocument → the nested shape both render
-  appearance.svelte.ts        theme + layout resolution, persisted
+raw text -> app segmenter -> app Tier 1 analyzer -> portable analysis
+         -> LangChunk Tier 2 -> UI / CLI / TUI / exports
 ```
 
-Neither shell styles anything. **No per-layout font sizes or surface colours —
-adding any is a regression**; two attempts at a distinct desktop skin were
-built and rejected by the owner (engine repo §V4-64 has the history).
-`ssr = false` because layout choice needs the window and localStorage.
+`backend/packages/pipeline` owns the app-specific raw-text orchestration.
+`backend/packages/tier1-stanza`, `tier1-onnx`, and `tier1-agreement` hold
+production copies promoted from the evaluator. The CLI, TUI, and server select
+those packages; LangChunk is never asked to run a model.
 
-`svelte-check` clean; unit tests (vitest, `--project server`) and 17 e2e tests
-green (stubbed service — they need no model and no server).
+`pnpm run setup:stanza` creates/repairs the local bridge environment and
+installs both Stanza and Python `transformers<5`. The cap is required for the
+Russian ruBERT checkpoint; setup uses `python -m pip` so an existing virtualenv
+survives a directory rename.
 
-## The server
+The frontend remains a separate Bun tree; the backend remains a strict pnpm
+workspace. Their sole runtime seam is the local HTTP service.
 
-`/api/languages` (model-pack catalogue + pack-only languages listed
-unavailable-with-reason), `/api/install` (streamed progress, SHA-256 verified,
-staged-then-committed), `/api/analyze`, `/api/corrections` (append-only JSONL
-at `~/.langchunk/corrections.jsonl`). Runtime per language is chosen on
-**measured accuracy** from the pack manifests, never hardcoded.
+## Verification
 
-## Key invariants
+After the refactor, `cd backend && pnpm run verify` passed typecheck and 81
+tests, including runtime decode, agreement, pipeline, and frontend mirror
+coverage. The lockfile records app-owned ONNX runtime dependencies.
 
-- **The frontend must not import from the pnpm workspace or the engine repo.**
-  It is installed with bun and mirrors three files by hand; the mirror suite
-  is what makes that safe.
-- **A layout may arrange components; it may never re-skin them.**
-- **A downloaded pack is SHA-256-verified, staged, then committed.** A
-  truncated model loads and then behaves strangely.
-- **A pack's advertised accuracy comes from a measurement** (the engine's
-  committed reports), never a hand-typed literal.
-- **A correction can never become evidence** — fixture skeletons ship with
-  expected output blank and `unreviewed`.
-- **Engine version bumps are deliberate.** The dep is `"langchunk": "^0.1.0"`;
-  an accuracy-affecting engine change arrives by publishing there and bumping
-  here, with the changelog read.
+## Invariants
 
-## What is missing
-
-- Nothing downloads/installs the local service itself; the app explains how to
-  start it. Open packaging question (binary? npx? installer?).
-- Pack hosting: `dist-packs/` is built in the engine repo and served locally;
-  `LANGCHUNK_REGISTRY` can point anywhere static, but no public host exists.
-  The generated output now belongs here at `backend/dist-packs/`, so the local
-  server's default registry works without a sibling-path override. The engine's
-  pack builder produces it explicitly with
-  `LANGCHUNK_PACK_OUTPUT=../speechsplitter/backend/dist-packs`.
+- Candidate Tier 1 work, models, and whole-pipeline measurement stay in
+  `../speechsplitter-eval`; this app receives explicit promoted copies only.
+- LangChunk behavior is consumed from the npm package, never vendored or
+  imported from its source checkout.
+- Production runtime changes must be evaluated before promotion.

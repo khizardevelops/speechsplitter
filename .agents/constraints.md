@@ -38,9 +38,11 @@ Hard rules. Violating one of these breaks the architecture, not just a test.
   language-generality, packs are data not parsers, spans index the original
   text) are enforced *there*; this repo inherits them by depending on a
   published version.
-- Apps that use the ONNX analyzer must declare `onnxruntime-node` and
-  `@huggingface/transformers` themselves — the engine deliberately lists them
-  as optional peers.
+- **Tier 1 runtime execution is application-owned.** Keep model packages under
+  `backend/packages/tier1-*`; never move them back into LangChunk. Candidate
+  implementations belong in the evaluator until promoted.
+- ONNX runtime dependencies are declared by `tier1-onnx`, not copied into each
+  application entrypoint.
 
 ## Runtime
 

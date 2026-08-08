@@ -1,9 +1,9 @@
 # speechsplitter — Context
 
-This repository is the **application** half of LangChunk. The analysis engine —
-UD parse → sentences/clauses/phrases/words, the language packs, the gates, the
-measured accuracy — is the **`langchunk` npm package**, developed at
-github.com/khizardevelops/langchunk. Everything here consumes it.
+This repository is the **production application**. LangChunk is its standalone
+Tier 2 npm dependency; this backend owns production Tier 1 runtimes and the
+raw-text pipeline that feeds their portable output to LangChunk. Candidate
+models, corpora, and Gate evidence belong in `speechsplitter-eval`.
 
 What lives here and why:
 

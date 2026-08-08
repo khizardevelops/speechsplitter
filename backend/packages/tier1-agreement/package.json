@@ -1,0 +1,28 @@
+{
+  "name": "@speechsplitter/tier1-agreement",
+  "version": "4.1.0",
+  "description": "Derives calibrated confidence from two analyzers' agreement.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "langchunk": "^0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

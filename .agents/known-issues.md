@@ -14,11 +14,11 @@ Saadi's *Bani Adam* excerpt. Any fix for spaced `/` must split spans around the
 existing delimiter — never rewrite the submitted text — so every reported span
 still indexes the original input.
 
-Separately, the Stanza Persian parser analyses `چو عضوی به درد آورد روزگار`
+Separately, the production Stanza parser analyses `چو عضوی به درد آورد روزگار`
 with `روزگار` as the root and `آورد` as `advcl`, which produces a false
-one-word clause. That is a Tier 1 model error in the npm package's analyzer,
-not an application segmentation error; do not paper over it with a language
-specific clause rule.
+one-word clause. That is a Tier 1 model error in the app-owned runtime (and a
+candidate-evaluation concern), not an application segmentation error; do not
+paper over it with a language-specific clause rule.
 
 ## Nothing installs the local service
 

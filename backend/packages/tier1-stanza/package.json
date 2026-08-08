@@ -1,7 +1,7 @@
 {
-  "name": "@langchunk/cli",
+  "name": "@speechsplitter/tier1-stanza",
   "version": "4.0.0",
-  "description": "The speechsplitter command-line tool, powered by langchunk.",
+  "description": "StanzaAnalyzer \u2014 reference Tier 1 parser via Python Stanza. Development and CLI only; never shipped.",
   "type": "module",
   "private": true,
   "exports": {
@@ -13,22 +13,15 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "python"
   ],
   "scripts": {
     "build": "tsc -b",
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
-  "bin": {
-    "speechsplitter": "./dist/cli.js"
-  },
   "dependencies": {
-    "langchunk": "^0.1.0",
-    "@speechsplitter/pipeline": "workspace:*",
-    "@speechsplitter/tier1-stanza": "workspace:*",
-    "@speechsplitter/tier1-onnx": "workspace:*",
-    "@speechsplitter/tier1-agreement": "workspace:*",
-    "commander": "^12.1.0"
+    "langchunk": "^0.1.0"
   },
   "devDependencies": {
     "typescript": "^5.6.0",

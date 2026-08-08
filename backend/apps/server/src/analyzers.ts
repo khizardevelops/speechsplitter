@@ -57,12 +57,12 @@ export async function analyzerFor(manifest: LanguagePackManifest): Promise<Analy
 }
 
 async function loadOnnx(manifest: LanguagePackManifest): Promise<Analyzer> {
-	const { OnnxAnalyzer } = await import('langchunk/analyzers/onnx');
+const { OnnxAnalyzer } = await import('@speechsplitter/tier1-onnx');
 	return OnnxAnalyzer.load({ modelDir: packDirectory(manifest) });
 }
 
 async function loadStanza(manifest: LanguagePackManifest): Promise<Analyzer> {
-	const { StanzaAnalyzer } = await import('langchunk/analyzers/stanza');
+const { StanzaAnalyzer } = await import('@speechsplitter/tier1-stanza');
 	// Persistent, because this server answers many small requests and a fresh
 	// pipeline per request costs seconds. See decisions.md §V4-38.
 	return new StanzaAnalyzer({ persistent: true }) as unknown as Analyzer;

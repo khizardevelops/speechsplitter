@@ -1,7 +1,7 @@
 {
-  "name": "@langchunk/cli",
-  "version": "4.0.0",
-  "description": "The speechsplitter command-line tool, powered by langchunk.",
+  "name": "@speechsplitter/tier1-onnx",
+  "version": "4.1.0",
+  "description": "OnnxAnalyzer \u2014 Tier 1 on a quantized ud-goeswith transformer.",
   "type": "module",
   "private": true,
   "exports": {
@@ -19,16 +19,10 @@
     "build": "tsc -b",
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
-  "bin": {
-    "speechsplitter": "./dist/cli.js"
-  },
   "dependencies": {
     "langchunk": "^0.1.0",
-    "@speechsplitter/pipeline": "workspace:*",
-    "@speechsplitter/tier1-stanza": "workspace:*",
-    "@speechsplitter/tier1-onnx": "workspace:*",
-    "@speechsplitter/tier1-agreement": "workspace:*",
-    "commander": "^12.1.0"
+    "@huggingface/transformers": "^4.2.0",
+    "onnxruntime-node": "^1.20.0"
   },
   "devDependencies": {
     "typescript": "^5.6.0",

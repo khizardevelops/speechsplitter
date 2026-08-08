@@ -54,6 +54,18 @@ Current bug entry:
 
 Keep a concise, verifiable history here. Add newly fixed bugs first.
 
+### BUG-001 — Russian Stanza runtime omitted Python Transformers
+- Fixed: 2026-08-08
+- Cause: The promoted Stanza bridge selected the transformer-backed Russian
+  `syntagrus_pavlov-rubert` parser, while its documented setup installed only
+  `stanza`. A renamed virtualenv also retained a stale absolute `pip` launcher.
+- Resolution: Added bridge requirements (`stanza`, `transformers<5`) and a
+  `pnpm run setup:stanza` command using `python -m pip`; the bridge now reports
+  that exact remediation without treating the missing dependency as a model
+  download failure.
+- Verification: Setup imports Stanza 1.14.0 and Transformers 4.57.6; a direct
+  Russian bridge request returned valid CoNLL-U; backend verification passed.
+
 <!--
 Fixed bug entry:
 

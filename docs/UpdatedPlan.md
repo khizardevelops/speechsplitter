@@ -4,6 +4,13 @@
 > application is now **speechsplitter**; `langchunk` is its separate MIT npm
 > dependency. The repository root `README.md` and `LICENSE` supersede any old
 > product-name or licensing statements in this document.
+>
+> **Ownership after the Tier 1/Tier 2 refactor:** LangChunk is now a standalone
+> Tier 2 package that accepts portable dependency analysis and never executes a
+> model. `speechsplitter-eval` owns experimental Tier 1 runtimes, models,
+> corpora, and whole-pipeline evaluation. SpeechSplitter owns separately
+> promoted production Tier 1 runtimes plus raw-text orchestration. Names and
+> paths in the historical stages below predate that split.
 
 ## 0. Status of This Document
 

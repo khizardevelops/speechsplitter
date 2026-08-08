@@ -24,12 +24,18 @@ app consumes `langchunk` from npm with subpath imports; `@langchunk/packs`
 and `@langchunk/corrections` stay local workspace packages (private,
 never published — the scoped names are historical, not a promise).
 
-Consequences: engine bugs are fixed in the engine repo and arrive by version
-bump; the apps that use the ONNX analyzer declare `onnxruntime-node` and
-`@huggingface/transformers` themselves because the engine lists them as
-optional peers; the mirror suite compares the frontend against the *installed*
+Consequences: Tier 2 engine bugs are fixed in the engine repo and arrive by
+version bump; the mirror suite compares the frontend against the *installed*
 package, so it also guards against an engine release changing exporter
 behaviour under the app.
+
+## A6. Production Tier 1 is app-owned; evaluation comes first
+
+2026-08-08: LangChunk now accepts portable Tier 1 output and never executes a
+model. SpeechSplitter owns `backend/packages/tier1-*` and the raw-text pipeline
+that invokes them. `speechsplitter-eval` owns candidate counterparts, heavy
+model/corpus state, and Gates 2/3. Promotion is an explicit copy after a
+recorded evaluation; the app must not depend on evaluator source at runtime.
 
 ## A2. The frontend is one Konsta design system, two layouts (engine §V4-64–67)
 

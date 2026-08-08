@@ -14,6 +14,10 @@ const packages = {
   "@langchunk/packs": "packages/packs/src/index.ts",
   "@langchunk/corrections": "packages/corrections/src/index.ts",
   "@langchunk/cli": "apps/cli/src/index.ts",
+  "@speechsplitter/pipeline": "packages/pipeline/src/index.ts",
+  "@speechsplitter/tier1-stanza": "packages/tier1-stanza/src/index.ts",
+  "@speechsplitter/tier1-onnx": "packages/tier1-onnx/src/index.ts",
+  "@speechsplitter/tier1-agreement": "packages/tier1-agreement/src/index.ts",
 };
 
 export default defineConfig({

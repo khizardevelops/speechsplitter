@@ -1,7 +1,7 @@
 /**
  * End-to-end pipeline tests.
  *
- * Driven by `GoldAnalyzer` rather than `StanzaAnalyzer` on purpose: these assert
+ * Driven by fixed gold analysis rather than `StanzaAnalyzer` on purpose: these assert
  * that the *wiring* is right — language resolution, segmentation, Tier 1, Tier 2,
  * rendering — and mixing in a model's judgement would make a failure ambiguous
  * between "the pipeline is wrong" and "the parser was wrong". It also means the
@@ -11,11 +11,16 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { parseConlluSentences } from "langchunk/conllu";
-import { GoldAnalyzer } from "langchunk/analyzers/gold";
-import type { Analyzer } from "langchunk/schema";
+import {
+  offsetSpan,
+  parseConlluSentences,
+  parseFeats,
+  reconstructSentence,
+  syntacticWords,
+} from "langchunk/conllu";
+import type { Analyzer, AnalyzedSentence } from "langchunk/schema";
 import { checkIntegrity, parseDocument } from "langchunk/validators";
-import { parseText } from "langchunk/pipeline";
+import { parseText } from "@speechsplitter/pipeline";
 import { render } from "../src/render.js";
 
 /** "The dog barked. It ran away quickly." as hand-written gold trees. */
@@ -40,8 +45,47 @@ const RUSSIAN_CONLLU = `# text = Погода хорошая.
 3\t.\t.\tPUNCT\t.\t_\t2\tpunct\t_\tSpaceAfter=No
 `;
 
-function goldAnalyzer(conllu: string): GoldAnalyzer {
-  return new GoldAnalyzer(parseConlluSentences(conllu), { version: "test" });
+function goldAnalyzer(conllu: string): Analyzer & { text: string } {
+  const annotations = parseConlluSentences(conllu);
+  const sentences: AnalyzedSentence[] = [];
+  let text = "";
+  for (const annotation of annotations) {
+    if (text.length > 0) text += "\n";
+    const base = text.length;
+    const rebuilt = reconstructSentence(annotation);
+    text += rebuilt.text;
+    sentences.push({
+      span: { start: base, end: text.length },
+      text: rebuilt.text,
+      tokens: syntacticWords(annotation).map((token) => {
+        const span = rebuilt.spans.get(token.id);
+        if (span === undefined) throw new Error(`missing test span for token ${token.id}`);
+        const feats = parseFeats(token);
+        return {
+          id: Number(token.id),
+          form: token.form,
+          span: offsetSpan(span, base),
+          upos: token.upos === "_" ? "X" : token.upos,
+          head: Number(token.head),
+          deprel: token.deprel === "_" ? "dep" : token.deprel,
+          confidence: 1,
+          ...(token.lemma !== "_" ? { lemma: token.lemma } : {}),
+          ...(token.xpos !== "_" ? { xpos: token.xpos } : {}),
+          ...(Object.keys(feats).length > 0 ? { feats } : {}),
+        };
+      }),
+    });
+  }
+  return {
+    id: "gold",
+    version: "test",
+    text,
+    supports: () => true,
+    analyze: (input) =>
+      input === text
+        ? Promise.resolve(sentences)
+        : Promise.reject(new Error("gold analysis was given different text")),
+  };
 }
 
 describe("parseText", () => {

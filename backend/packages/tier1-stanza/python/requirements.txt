@@ -1,0 +1,5 @@
+# `syntagrus_pavlov-rubert` and other Stanza transformer-backed packages need
+# Python Transformers in addition to Stanza itself. Transformers 5 rejects the
+# Russian backbone's pickle checkpoint, so keep this runtime on the 4.x line.
+stanza>=1.14,<2
+transformers>=4.30,<5

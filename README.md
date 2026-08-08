@@ -3,9 +3,9 @@
 Paste text, get its grammar back: **sentences → clauses → phrases → words**,
 each unit traceable to the exact characters it came from. This repository is
 the **speechsplitter** application — a local-first web app, a local analysis
-service, a CLI and a TUI. The analysis engine itself is the
-[`langchunk`](https://github.com/khizardevelops/langchunk) npm package, and
-everything here is a consumer of it.
+service, a CLI and a TUI. [`langchunk`](https://github.com/khizardevelops/langchunk)
+is the standalone Tier 2 grammar package; this application owns the production
+Tier 1 runtimes and raw-text orchestration that feed it.
 
 **Try it:** https://khizardevelops.github.io/speechsplitter/
 
@@ -26,6 +26,10 @@ backend/        everything Node — pnpm workspace, installed independently
   apps/server     the local service: pack registry, verified installs, analysis
   apps/cli        `speechsplitter parse --format outline|csv|jsonl|anki …`
   apps/tui        interactive terminal session (keeps the parser warm)
+  packages/pipeline       raw text → Tier 1 → LangChunk Tier 2 orchestration
+  packages/tier1-stanza   promoted production Python/Stanza runtime
+  packages/tier1-onnx     promoted production ONNX runtime
+  packages/tier1-agreement calibrated confidence from production runtimes
   packages/packs        language-pack manifests + runtime selection, data only
   packages/corrections  the human correction loop
   tests/          the mirror suite: the frontend's three hand-copied files,
@@ -51,8 +55,7 @@ The CLI and TUI need the Python bridge for the highest-accuracy parser:
 
 ```bash
 cd backend
-python3 -m venv --system-site-packages .venv-stanza
-.venv-stanza/bin/pip install stanza
+pnpm run setup:stanza
 
 pnpm run tui
 pnpm run speechsplitter parse --lang en --format outline file.txt
@@ -67,5 +70,6 @@ cd frontend && bun run check && bun run test:unit -- --run && bun run test:e2e
 
 ## License
 
-[AGPL-3.0](LICENSE). The engine's measured accuracy numbers, gates and design
-decisions live in the [engine repo](https://github.com/khizardevelops/langchunk).
+[AGPL-3.0](LICENSE). Whole-pipeline measurements and candidate-model experiments
+live in [speechsplitter-eval](https://github.com/khizardevelops/speechsplitter-eval);
+the MIT LangChunk package remains independently usable without this app.

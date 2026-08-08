@@ -17,11 +17,11 @@ import { listPacks, resolveLanguage } from "langchunk/lang";
 import { installLanguagePlugins } from "langchunk/lang-node";
 import { checkIntegrity } from "langchunk/validators";
 import type { Analyzer } from "langchunk/schema";
-import { StanzaAnalyzer } from "langchunk/analyzers/stanza";
-import { AgreementAnalyzer } from "langchunk/analyzers/agreement";
-import { OnnxAnalyzer } from "langchunk/analyzers/onnx";
+import { StanzaAnalyzer } from "@speechsplitter/tier1-stanza";
+import { AgreementAnalyzer } from "@speechsplitter/tier1-agreement";
+import { OnnxAnalyzer } from "@speechsplitter/tier1-onnx";
 import { resolve } from "node:path";
-import { parseText } from "langchunk/pipeline";
+import { parseText } from "@speechsplitter/pipeline";
 import { render, type Format } from "./render.js";
 
 const FORMATS: readonly Format[] = [

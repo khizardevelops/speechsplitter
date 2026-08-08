@@ -17,8 +17,10 @@
   },
   "dependencies": {
     "langchunk": "^0.1.0",
-    "@huggingface/transformers": "^4.2.0",
-    "onnxruntime-node": "^1.20.0",
+    "@speechsplitter/pipeline": "workspace:*",
+    "@speechsplitter/tier1-stanza": "workspace:*",
+    "@speechsplitter/tier1-onnx": "workspace:*",
+    "@speechsplitter/tier1-agreement": "workspace:*",
     "picocolors": "^1.1.0"
   },
   "devDependencies": {

@@ -16,12 +16,12 @@
 import { createInterface } from "node:readline";
 import { readFile } from "node:fs/promises";
 import pc from "picocolors";
-import { parseText } from "langchunk/pipeline";
+import { parseText } from "@speechsplitter/pipeline";
 import { listPacks, packFor, resolveLanguage } from "langchunk/lang";
 import { installLanguagePlugins } from "langchunk/lang-node";
-import { StanzaAnalyzer } from "langchunk/analyzers/stanza";
-import { AgreementAnalyzer } from "langchunk/analyzers/agreement";
-import { OnnxAnalyzer } from "langchunk/analyzers/onnx";
+import { StanzaAnalyzer } from "@speechsplitter/tier1-stanza";
+import { AgreementAnalyzer } from "@speechsplitter/tier1-agreement";
+import { OnnxAnalyzer } from "@speechsplitter/tier1-onnx";
 import type { Analyzer } from "langchunk/schema";
 import { legend, renderDocument, summarise } from "./view.js";
 

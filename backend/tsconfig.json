@@ -3,6 +3,10 @@
   "references": [
     { "path": "./packages/packs" },
     { "path": "./packages/corrections" },
+    { "path": "./packages/pipeline" },
+    { "path": "./packages/tier1-stanza" },
+    { "path": "./packages/tier1-onnx" },
+    { "path": "./packages/tier1-agreement" },
     { "path": "./apps/cli" },
     { "path": "./apps/tui" },
     { "path": "./apps/server" }

@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "langchunk": "^0.1.0",
-    "@huggingface/transformers": "^4.2.0",
-    "onnxruntime-node": "^1.20.0",
+    "@speechsplitter/tier1-stanza": "workspace:*",
+    "@speechsplitter/tier1-onnx": "workspace:*",
     "@langchunk/corrections": "workspace:*",
     "@langchunk/packs": "workspace:*"
   },

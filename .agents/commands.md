@@ -18,15 +18,16 @@ run `bun install` in `frontend/` once and they run for real.
 
 ## Running it on text
 
-Needs the Python bridge once (for the Stanza analyzer):
+Needs the app-owned Python bridge once (for the production Stanza runtime):
 
 ```bash
-python3 -m venv --system-site-packages .venv-stanza
-.venv-stanza/bin/pip install stanza
+cd backend
+pnpm run setup:stanza
 ```
 
-`--system-site-packages` matters — without it pip re-downloads PyTorch and the
-venv is ~3 GB instead of 67 MB.
+The setup command keeps `--system-site-packages` (so pip does not re-download
+PyTorch) and installs Stanza plus Python `transformers<5`, required by the
+production Russian transformer-backed parser.
 
 ```bash
 cd backend
@@ -60,12 +61,11 @@ running server.
 ## Model-pack catalogue
 
 `backend/dist-packs/` is this application's generated runtime catalogue. It is
-not npm-package content and is intentionally gitignored. After a package
-developer produces new converted models and measurements, refresh it from the
-engine checkout:
+not npm-package content and is intentionally gitignored. After a candidate
+model passes evaluation, build a production catalogue from the evaluator:
 
 ```bash
-cd ../langchunk
+cd ../speechsplitter-eval
 LANGCHUNK_PACK_OUTPUT=../speechsplitter/backend/dist-packs pnpm run packs:build
 ```
 
@@ -97,5 +97,6 @@ pnpm update langchunk --latest   # or edit the range in each package.json
 pnpm run verify
 ```
 
-Engine development (gates, accuracy, packs data) happens in
-`../langchunk` — publish there, bump here.
+Tier 2 package development happens in `../langchunk` — publish there, bump
+here. Tier 1 experiments and Gates 2/3 happen in `../speechsplitter-eval`;
+promote only selected runtime changes here.
