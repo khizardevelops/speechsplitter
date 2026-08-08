@@ -6,6 +6,29 @@
 monorepo. The engine stayed at `../langchunk` (npm package `langchunk`,
 published 0.1.0); everything application moved here.
 
+## Naming and release-preparation update — 2026-08-08
+
+- Renamed the local application directory to `speechsplitter`, changed public
+  metadata/Pages links/UI labels/CLI and TUI branding, and set `origin` to
+  `git@github.com:khizardevelops/speechsplitter.git`.
+- The full AGPL-3.0 license remains the application license. Package imports
+  remain `langchunk`, which is the separate MIT engine.
+- Backend verification (49 tests), frontend Svelte checks, and the new CLI
+  help surface passed. GitHub-side rename and any push remain owner actions
+  because this environment has no GitHub authentication.
+
+## Subsequent diagnostic
+
+- User reported every language unavailable despite the server loading the
+  Pashto language-data pack. `GET /api/languages` proved the registry was
+  empty: its default file URL targets the missing
+  `backend/dist-packs/registry.json`. The split left the actual built registry
+  at `../langchunk/dist-packs/registry.json`.
+- This is not a broken parser pipeline. A temporary server launched with
+  `LANGCHUNK_REGISTRY=file:///…/langchunk/dist-packs/registry.json` returned
+  EN/RU model variants as runnable/downloadable immediately. No source or
+  runtime configuration was changed in this diagnostic.
+
 ## What was done
 
 - Physical move: `frontend/`, `apps/{server,cli,tui}`,
@@ -43,3 +66,24 @@ npm availability, not the workspace.
 `tasks.md`: nothing installs the local service (the owner-facing gap), then
 pack hosting. Engine accuracy work (French span bug, English clause misses)
 belongs in `../langchunk`.
+
+## Subsequent boundary repair
+
+- Moved the generated `dist-packs/` catalogue and ONNX payload from the engine
+  checkout into `backend/dist-packs/`, the application server's default
+  registry location. This restores the full language catalogue without
+  `LANGCHUNK_REGISTRY` pointing at a sibling directory.
+- The engine retains conversion tooling, source models, and measured reports;
+  its pack builder now requires an explicit `LANGCHUNK_PACK_OUTPUT` and the app
+  commands document the refresh path. No package source moved into the app.
+
+## Subsequent Persian-output diagnosis
+
+- Reproduced the malformed Saadi paste through `/api/analyze`. Missing word
+  boundaries (`گوهرندچو`, `قرارتو`) and treating spaced `/` as ordinary text
+  leave it as one sentence. Replacing them with real spaces and line breaks
+  yields six proper sentence spans without any code change.
+- The clean third line still emits `روزگار` as a one-word clause because Stanza
+  marks it root and attaches `آورد` as `advcl`. That is a Tier 1 package-model
+  error; the application task is only to support spaced poetry delimiters while
+  preserving spans into the original text.

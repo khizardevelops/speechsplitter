@@ -1,4 +1,24 @@
-# LangChunk App — Known Issues
+# speechsplitter — Known Issues
+
+## Poetry pasted with spaced slash delimiters is treated as one sentence
+
+**Severity**: Medium — ordinary verse pasted as `line / line` does not get the
+line boundaries that a newline would provide. The segmenter deliberately keeps
+the original text and currently does not treat a spaced `/` as a sentence
+delimiter, so the parser receives an unrealistically long sentence.
+
+The input must still preserve every word boundary: `گوهرندچو` and `قرارتو`
+cannot be recovered reliably because they are each one token. With real line
+breaks and those spaces restored, the app produces six sentence spans for
+Saadi's *Bani Adam* excerpt. Any fix for spaced `/` must split spans around the
+existing delimiter — never rewrite the submitted text — so every reported span
+still indexes the original input.
+
+Separately, the Stanza Persian parser analyses `چو عضوی به درد آورد روزگار`
+with `روزگار` as the root and `آورد` as `advcl`, which produces a false
+one-word clause. That is a Tier 1 model error in the npm package's analyzer,
+not an application segmentation error; do not paper over it with a language
+specific clause rule.
 
 ## Nothing installs the local service
 

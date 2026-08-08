@@ -1,13 +1,13 @@
-# LangChunk (the app)
+# speechsplitter
 
 Paste text, get its grammar back: **sentences → clauses → phrases → words**,
 each unit traceable to the exact characters it came from. This repository is
-the *application* — a local-first web app, a local analysis service, a CLI and
-a TUI. The analysis engine itself is the
+the **speechsplitter** application — a local-first web app, a local analysis
+service, a CLI and a TUI. The analysis engine itself is the
 [`langchunk`](https://github.com/khizardevelops/langchunk) npm package, and
 everything here is a consumer of it.
 
-**Try it:** https://khizardevelops.github.io/langchunk-app/
+**Try it:** https://khizardevelops.github.io/speechsplitter/
 
 The deployed page is fully static; analysis runs in a *local* service on your
 machine (browsers exempt `localhost` from mixed-content blocking, so the HTTPS
@@ -24,12 +24,14 @@ insulated on purpose. Neither imports from the other; the one seam is HTTP.
 frontend/       the web app — SvelteKit 5 + Konsta UI (iOS theme), bun
 backend/        everything Node — pnpm workspace, installed independently
   apps/server     the local service: pack registry, verified installs, analysis
-  apps/cli        `langchunk parse --format outline|csv|jsonl|anki …`
+  apps/cli        `speechsplitter parse --format outline|csv|jsonl|anki …`
   apps/tui        interactive terminal session (keeps the parser warm)
   packages/packs        language-pack manifests + runtime selection, data only
   packages/corrections  the human correction loop
   tests/          the mirror suite: the frontend's three hand-copied files,
                   checked against the published langchunk package by behaviour
+  dist-packs/     generated model registry + downloadable payload, served by
+                  the local server and intentionally not committed
 ```
 
 ## Running it
@@ -53,7 +55,7 @@ python3 -m venv --system-site-packages .venv-stanza
 .venv-stanza/bin/pip install stanza
 
 pnpm run tui
-pnpm run langchunk parse --lang en --format outline file.txt
+pnpm run speechsplitter parse --lang en --format outline file.txt
 ```
 
 ## Verifying

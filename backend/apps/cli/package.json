@@ -1,7 +1,7 @@
 {
   "name": "@langchunk/cli",
   "version": "4.0.0",
-  "description": "The langchunk command-line tool.",
+  "description": "The speechsplitter command-line tool, powered by langchunk.",
   "type": "module",
   "private": true,
   "exports": {
@@ -20,7 +20,7 @@
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "bin": {
-    "langchunk": "./dist/cli.js"
+    "speechsplitter": "./dist/cli.js"
   },
   "dependencies": {
     "langchunk": "^0.1.0",

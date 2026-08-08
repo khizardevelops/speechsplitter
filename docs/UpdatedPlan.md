@@ -1,4 +1,9 @@
-# LangChunk — Plan v4: An Executable Neural-Core / Rule-Layer Hybrid
+# Historical LangChunk — Plan v4: An Executable Neural-Core / Rule-Layer Hybrid
+
+> This pre-split engineering plan is retained for historical context only. The
+> application is now **speechsplitter**; `langchunk` is its separate MIT npm
+> dependency. The repository root `README.md` and `LICENSE` supersede any old
+> product-name or licensing statements in this document.
 
 ## 0. Status of This Document
 

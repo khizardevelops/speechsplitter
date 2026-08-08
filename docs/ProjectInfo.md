@@ -1,4 +1,9 @@
-# LangChunk Project Information
+# Historical LangChunk Project Information
+
+> This pre-split engineering note is retained for historical context. The
+> application is now **speechsplitter** and its engine is the separate,
+> MIT-licensed `langchunk` npm package; the repository root `README.md` and
+> `LICENSE` are the current public source of truth.
 
 ## One-Line Summary
 

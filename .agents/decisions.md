@@ -1,10 +1,18 @@
-# LangChunk App — Decisions
+# speechsplitter — Decisions
 
 Engine-side decisions (the two-tier design, why Stanza, why packs are data,
 the accuracy doctrine) live in the engine repo:
 `../langchunk/.agents/decisions.md`. They are not duplicated here — read them
 there before reopening anything that smells settled. Entries below are the
 ones that bind *this* repo directly.
+
+## A0. Product identity is speechsplitter; engine identity is langchunk
+
+2026-08-08, owner: `langchunk` remains the name of the MIT npm package.
+This repository is the AGPL-3.0-only **speechsplitter** application, including
+its web app, local service, CLI, and TUI. Public application labels and the
+application CLI use `speechsplitter`; TypeScript imports and dependency
+references remain `langchunk` because they name the separate engine package.
 
 ## A1. This repo exists because the engine became an npm package
 

@@ -21,7 +21,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<title>LangChunk</title>
+	<title>speechsplitter</title>
 	<meta
 		name="description"
 		content="Break text into sentences, clauses, phrases, and words — each traceable to the characters it came from."

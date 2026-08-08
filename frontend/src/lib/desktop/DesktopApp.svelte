@@ -113,7 +113,7 @@
 
 	<div class="relative min-w-0 flex-1">
 		<Page>
-			<Navbar title="LangChunk" subtitle="Sentences, clauses, phrases, words">
+			<Navbar title="speechsplitter" subtitle="Sentences, clauses, phrases, words">
 				{#snippet right()}
 					<!--
 						One control, and its anchor has to keep its own height.
@@ -218,7 +218,7 @@
 
 			<div class="space-y-2 border-t border-black/8 pt-4 text-[14px] dark:border-white/10">
 				<p>
-					LangChunk breaks text into four levels at once — sentences, clauses, phrases, words — and
+					speechsplitter breaks text into four levels at once — sentences, clauses, phrases, words — and
 					keeps every unit tied to the characters it came from.
 				</p>
 				<p class="opacity-50">
@@ -239,7 +239,7 @@
 		opened={session.serverDown}
 		onBackdropClick={() => (session.serverDown = false)}
 	>
-		{#snippet title()}The LangChunk service is not running{/snippet}
+		{#snippet title()}The speechsplitter service is not running{/snippet}
 
 		<p>
 			Analysis happens on your computer, not in the browser. Start it with

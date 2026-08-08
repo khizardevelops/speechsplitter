@@ -1,4 +1,4 @@
-# LangChunk App — Context
+# speechsplitter — Context
 
 This repository is the **application** half of LangChunk. The analysis engine —
 UD parse → sentences/clauses/phrases/words, the language packs, the gates, the

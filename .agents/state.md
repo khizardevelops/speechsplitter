@@ -1,6 +1,11 @@
-# LangChunk App — State
+# speechsplitter — State
 
 ## Current status
+
+Renamed locally to **speechsplitter** on 2026-08-08. This AGPL-3.0-only
+repository is the application; `langchunk` remains its separate MIT npm
+dependency. Its local `origin` targets `khizardevelops/speechsplitter` pending
+the owner-authenticated GitHub repository rename.
 
 Created 2026-08-06 by splitting the original monorepo (engine repo decision
 §V4-71): the engine stayed at github.com/khizardevelops/langchunk and ships as
@@ -82,3 +87,7 @@ at `~/.langchunk/corrections.jsonl`). Runtime per language is chosen on
   start it. Open packaging question (binary? npx? installer?).
 - Pack hosting: `dist-packs/` is built in the engine repo and served locally;
   `LANGCHUNK_REGISTRY` can point anywhere static, but no public host exists.
+  The generated output now belongs here at `backend/dist-packs/`, so the local
+  server's default registry works without a sibling-path override. The engine's
+  pack builder produces it explicitly with
+  `LANGCHUNK_PACK_OUTPUT=../speechsplitter/backend/dist-packs`.

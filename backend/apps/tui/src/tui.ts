@@ -188,7 +188,7 @@ async function handleCommand(line: string): Promise<boolean> {
 process.stdout.write(
   [
     "",
-    pc.bold("  langchunk") + pc.dim("  ·  sentences, clauses, phrases, words"),
+    pc.bold("  speechsplitter") + pc.dim("  ·  sentences, clauses, phrases, words"),
     pc.dim("  the first input loads the parser and takes a few seconds; the rest are instant"),
     pc.dim("  :help for commands"),
     "",

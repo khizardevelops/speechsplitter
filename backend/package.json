@@ -1,14 +1,14 @@
 {
-  "name": "langchunk-backend",
+  "name": "speechsplitter-backend",
   "version": "1.0.0",
-  "description": "The LangChunk backend: local analysis service, CLI and TUI over the langchunk engine",
+  "description": "The speechsplitter backend: local analysis service, CLI and TUI powered by the langchunk engine",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@11.18.0",
   "scripts": {
     "build": "tsc -b",
     "clean": "tsc -b --clean && rm -rf apps/*/dist packages/*/dist",
-    "langchunk": "node apps/cli/dist/cli.js",
+    "speechsplitter": "node apps/cli/dist/cli.js",
     "server": "node apps/server/dist/server.js",
     "tui": "node apps/tui/dist/tui.js",
     "test": "vitest run",
@@ -36,10 +36,10 @@
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/khizardevelops/langchunk-app.git"
+    "url": "git+https://github.com/khizardevelops/speechsplitter.git"
   },
-  "homepage": "https://khizardevelops.github.io/langchunk-app/",
+  "homepage": "https://khizardevelops.github.io/speechsplitter/",
   "bugs": {
-    "url": "https://github.com/khizardevelops/langchunk-app/issues"
+    "url": "https://github.com/khizardevelops/speechsplitter/issues"
   }
 }

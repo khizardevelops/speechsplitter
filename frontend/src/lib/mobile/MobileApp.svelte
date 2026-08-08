@@ -47,7 +47,7 @@
 -->
 <App theme="ios" class="mx-auto max-w-[600px] shadow-[0_0_60px_rgba(0,0,0,0.18)]">
 	<Page>
-		<Navbar large title="LangChunk" subtitle="Sentences, clauses, phrases, words">
+		<Navbar large title="speechsplitter" subtitle="Sentences, clauses, phrases, words">
 			{#snippet right()}
 				<Link iconOnly aria-label="Settings" onClick={() => (settingsOpen = true)}>
 					<Glyph name="gear" size={22} />
@@ -126,7 +126,7 @@
 		</BlockFooter>
 
 		<BlockFooter inset>
-			LangChunk breaks text into four levels at once — sentences, clauses, phrases, words — and
+			speechsplitter breaks text into four levels at once — sentences, clauses, phrases, words — and
 			keeps every unit tied to the characters it came from. It runs entirely on this computer; no
 			text leaves the machine.
 		</BlockFooter>
@@ -142,7 +142,7 @@
 		opened={session.serverDown}
 		onBackdropClick={() => (session.serverDown = false)}
 	>
-		{#snippet title()}The LangChunk service is not running{/snippet}
+		{#snippet title()}The speechsplitter service is not running{/snippet}
 
 		<p>
 			Analysis happens on your computer, not in the browser. Start it with

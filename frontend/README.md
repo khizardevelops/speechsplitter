@@ -1,4 +1,4 @@
-# LangChunk web app
+# speechsplitter web app
 
 The interface over the local analysis service: paste text, pick a language,
 and read it back as sentences, clauses, phrases and words — every unit
@@ -59,5 +59,5 @@ bun run lint               # prettier + eslint
 
 ```sh
 bun run build              # static site in build/ (adapter-static, SPA fallback)
-BASE_PATH=/langchunk bun run build   # for GitHub Pages project hosting
+BASE_PATH=/speechsplitter bun run build   # for GitHub Pages project hosting
 ```

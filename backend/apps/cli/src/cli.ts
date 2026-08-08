@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The `langchunk` command.
+ * The `speechsplitter` command, powered by the `langchunk` package.
  *
  * docs/UpdatedPlan.md §14 Stage 2: "the first point you have a tool you actually
  * use. Dogfooding on real text is where accuracy bugs surface that no fixture
@@ -39,7 +39,7 @@ const FORMATS: readonly Format[] = [
 const program = new Command();
 
 program
-  .name("langchunk")
+  .name("speechsplitter")
   .description(
     "Break text into sentences, clauses, phrases, and words — with every unit " +
       "traceable back to the exact characters it came from.",
@@ -195,7 +195,7 @@ async function readStdin(): Promise<string> {
 }
 
 function fail(message: string): never {
-  process.stderr.write(`langchunk: ${message}\n`);
+  process.stderr.write(`speechsplitter: ${message}\n`);
   process.exit(2);
 }
 
@@ -206,6 +206,6 @@ function fail(message: string): never {
 await installLanguagePlugins();
 
 program.parseAsync(process.argv).catch((error: unknown) => {
-  process.stderr.write(`langchunk: ${(error as Error).message}\n`);
+  process.stderr.write(`speechsplitter: ${(error as Error).message}\n`);
   process.exit(1);
 });

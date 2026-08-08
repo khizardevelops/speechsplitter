@@ -1,4 +1,4 @@
-# LangChunk App — Constraints
+# speechsplitter — Constraints
 
 Hard rules. Violating one of these breaks the architecture, not just a test.
 

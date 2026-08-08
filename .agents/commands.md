@@ -1,4 +1,4 @@
-# LangChunk App — Commands
+# speechsplitter — Commands
 
 Two self-contained trees: `backend/` is pnpm, `frontend/` is bun. Node 22.
 **All pnpm commands run from `backend/`** — the repo root holds no workspace.
@@ -10,6 +10,7 @@ cd backend
 pnpm install
 pnpm run verify            # typecheck + workspace tests (incl. mirror suite)
 pnpm run build             # tsc -b across the workspace
+pnpm run speechsplitter --help  # application CLI; langchunk remains the engine
 ```
 
 The mirror suite's CSV/JSONL checks skip unless the frontend tree is synced —
@@ -30,9 +31,9 @@ venv is ~3 GB instead of 67 MB.
 ```bash
 cd backend
 pnpm run build
-pnpm run langchunk doctor                                  # check the bridge
-pnpm run langchunk parse --lang en --format outline f.txt
-pnpm run langchunk languages                               # incl. plugin packs
+pnpm run speechsplitter doctor                             # check the bridge
+pnpm run speechsplitter parse --lang en --format outline f.txt
+pnpm run speechsplitter languages                          # incl. plugin packs
 pnpm run tui                                               # interactive session
 ```
 
@@ -55,6 +56,21 @@ bun run lint                     # prettier --check + eslint
 
 `test:e2e` stubs the service with `page.route`, so it needs no model and no
 running server.
+
+## Model-pack catalogue
+
+`backend/dist-packs/` is this application's generated runtime catalogue. It is
+not npm-package content and is intentionally gitignored. After a package
+developer produces new converted models and measurements, refresh it from the
+engine checkout:
+
+```bash
+cd ../langchunk
+LANGCHUNK_PACK_OUTPUT=../speechsplitter/backend/dist-packs pnpm run packs:build
+```
+
+The local server reads this directory by default; use `LANGCHUNK_REGISTRY` only
+to point at a hosted registry or another explicit source.
 
 ## Language plugin packs
 

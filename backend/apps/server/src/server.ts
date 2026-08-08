@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The local LangChunk service.
+ * The local speechsplitter service, powered by langchunk.
  *
  * A small HTTP server the web app talks to. It owns three things the browser
  * cannot: the pack registry, installing packs onto disk, and running the models.
@@ -340,7 +340,7 @@ await installLanguagePlugins();
 
 server.listen(PORT, () => {
 	process.stdout.write(
-		`langchunk server on http://localhost:${PORT}\n` +
+		`speechsplitter server on http://localhost:${PORT}\n` +
 			`  runtimes: ${[...availableRuntimes()].join(', ')}\n` +
 			`  registry: ${registryUrl()}\n`,
 	);

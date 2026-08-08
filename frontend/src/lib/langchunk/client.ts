@@ -1,5 +1,5 @@
 /**
- * Talking to the local LangChunk service.
+ * Talking to the local speechsplitter service.
  *
  * The app is a web page; the analysis is not. Models are hundreds of megabytes
  * and the most accurate engine needs a Python environment, so both live in a
@@ -66,7 +66,7 @@ export interface InstallProgress {
 
 export class ServerUnavailableError extends Error {
 	constructor() {
-		super('The LangChunk service is not running.');
+		super('The speechsplitter service is not running.');
 		this.name = 'ServerUnavailableError';
 	}
 }
