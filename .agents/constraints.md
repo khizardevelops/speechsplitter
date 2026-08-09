@@ -39,7 +39,7 @@ Hard rules. Violating one of these breaks the architecture, not just a test.
   text) are enforced *there*; this repo inherits them by depending on a
   published version.
 - **Tier 1 runtime execution is application-owned.** Keep model packages under
-  `backend/packages/tier1-*`; never move them back into LangChunk. Candidate
+  `backend/packages/tier1-*`; never move them back into langchunk. Candidate
   implementations belong in the evaluator until promoted.
 - ONNX runtime dependencies are declared by `tier1-onnx`, not copied into each
   application entrypoint.
@@ -51,7 +51,7 @@ Hard rules. Violating one of these breaks the architecture, not just a test.
   `exactOptionalPropertyTypes` in a package-level tsconfig.
 - pnpm for the workspace (settings in `pnpm-workspace.yaml`, not `.npmrc`),
   bun for `frontend/`. The two never meet.
-- LangChunk is not a translator, dictionary, grammar corrector, chatbot, or
+- langchunk is not a translator, dictionary, grammar corrector, chatbot, or
   summariser. Resist these even when easy.
 
 ## Project memory

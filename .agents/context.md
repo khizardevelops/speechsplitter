@@ -1,9 +1,10 @@
 # speechsplitter — Context
 
-This repository is the **production application**. LangChunk is its standalone
+This repository is the **production application**. langchunk is its standalone
 Tier 2 npm dependency; this backend owns production Tier 1 runtimes and the
-raw-text pipeline that feeds their portable output to LangChunk. Candidate
-models, corpora, and Gate evidence belong in `speechsplitter-eval`.
+raw-text pipeline that feeds their portable output to langchunk. Candidate
+models, corpora, and evaluation evidence stay outside this standalone
+application repository.
 
 What lives here and why:
 

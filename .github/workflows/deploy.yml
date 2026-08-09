@@ -3,7 +3,7 @@
 # The deployable is nothing but files: the app is fully client-side and the
 # analysis runs in the visitor's *local* service — the HTTPS page can reach
 # http://localhost:8787 because browsers exempt localhost from mixed-content
-# blocking. So "deploying LangChunk" means hosting the static frontend and
+# blocking. So deploying speechsplitter means hosting the static frontend and
 # nothing else; a visitor without the service sees the dialog explaining how to
 # start it, which is the ordinary first-run state.
 name: Deploy

@@ -1,5 +1,5 @@
 /**
- * SpeechSplitter owns raw-text orchestration and Tier 1 execution. LangChunk
+ * speechsplitter owns raw-text orchestration and Tier 1 execution. langchunk
  * receives only the resulting portable dependency analysis and performs Tier 2.
  */
 

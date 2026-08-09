@@ -1,5 +1,5 @@
 /**
- * SpeechSplitter production `StanzaAnalyzer` Tier 1 implementation.
+ * `StanzaAnalyzer` — promotion-compatible Tier 1 runtime.
  *
  * docs/UpdatedPlan.md §7.3. Shells out to Python Stanza and caches the CoNLL-U
  * it returns. **Development and CLI only — never shipped.** Nothing in the
@@ -327,20 +327,18 @@ export class StanzaAnalyzer implements Analyzer {
         { maxBuffer: 256 * 1024 * 1024, timeout: this.#timeoutMs },
         (error, stdout, stderr) => {
           if (error) {
-            // A timeout during the one-time model download is the most likely
-            // first-run failure and looks nothing like a real error, so name it.
+            // Parsing never downloads models. A timeout is therefore an actual
+            // bridge/model problem rather than first-run provisioning.
             const timedOut =
               (error as NodeJS.ErrnoException).code === "ETIMEDOUT" ||
               (error as { killed?: boolean }).killed === true;
             const hint = timedOut
-              ? `The process was killed after ${this.#timeoutMs}ms. Stanza downloads ` +
-                "its models on first use for a language, which can take longer than " +
-                "that; run it once directly to prime the cache:\n" +
-                `  echo '{"lang":"en","sentences":[{"text":"Hello.","start":0}]}' | ` +
-                `${this.#python} ${this.#script}`
+              ? `The process was killed after ${this.#timeoutMs}ms. Confirm the requested ` +
+                "model was provisioned before parsing:\n" +
+                "  pnpm run model:download -- --language <language>"
               : "Set LANGCHUNK_PYTHON to an interpreter with stanza installed, or run:\n" +
-                "  python3 -m venv --system-site-packages .venv-stanza\n" +
-                "  .venv-stanza/bin/pip install stanza";
+                "  pnpm run setup:stanza\n" +
+                "  pnpm run model:download -- --language <language>";
 
             reject(
               new Error(

@@ -8,7 +8,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import type { AnalyzedSentence, Analyzer } from "@langchunk/schema";
+import type { AnalyzedSentence, Analyzer } from "langchunk/schema";
 import { AgreementAnalyzer, DEFAULT_CALIBRATION } from "../src/index.js";
 
 const TEXT = "the dog barked";

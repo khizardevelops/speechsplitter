@@ -22,12 +22,14 @@ Needs the app-owned Python bridge once (for the production Stanza runtime):
 
 ```bash
 cd backend
-pnpm run setup:stanza
+pnpm run setup:stanza                       # install bridge dependencies; no model download
+pnpm run model:download -- --language en,ru # provision selected local Stanza models
 ```
 
 The setup command keeps `--system-site-packages` (so pip does not re-download
 PyTorch) and installs Stanza plus Python `transformers<5`, required by the
-production Russian transformer-backed parser.
+production Russian transformer-backed parser. Parsing is network-free: its
+Stanza resources and transformer backbones stay under ignored `backend/models/`.
 
 ```bash
 cd backend
@@ -64,11 +66,6 @@ running server.
 not npm-package content and is intentionally gitignored. After a candidate
 model passes evaluation, build a production catalogue from the evaluator:
 
-```bash
-cd ../speechsplitter-eval
-LANGCHUNK_PACK_OUTPUT=../speechsplitter/backend/dist-packs pnpm run packs:build
-```
-
 The local server reads this directory by default; use `LANGCHUNK_REGISTRY` only
 to point at a hosted registry or another explicit source.
 
@@ -98,5 +95,5 @@ pnpm run verify
 ```
 
 Tier 2 package development happens in `../langchunk` — publish there, bump
-here. Tier 1 experiments and Gates 2/3 happen in `../speechsplitter-eval`;
-promote only selected runtime changes here.
+here. Tier 1 experiments and quality gates happen outside this standalone
+application; promote only selected runtime changes here.

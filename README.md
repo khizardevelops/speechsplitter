@@ -1,75 +1,99 @@
 # speechsplitter
 
-Paste text, get its grammar back: **sentences → clauses → phrases → words**,
-each unit traceable to the exact characters it came from. This repository is
-the **speechsplitter** application — a local-first web app, a local analysis
-service, a CLI and a TUI. [`langchunk`](https://github.com/khizardevelops/langchunk)
-is the standalone Tier 2 grammar package; this application owns the production
-Tier 1 runtimes and raw-text orchestration that feed it.
+Paste text and explore its grammar as **sentences, clauses, phrases, and
+words**. `speechsplitter` is a standalone, local-first application with a web
+interface, local analysis service, CLI, and TUI.
 
-**Try it:** https://khizardevelops.github.io/speechsplitter/
+**Try it:** <https://khizardevelops.github.io/speechsplitter/>
 
-The deployed page is fully static; analysis runs in a *local* service on your
-machine (browsers exempt `localhost` from mixed-content blocking, so the HTTPS
-page can reach it). Languages install on demand — nothing about a language
-ships in the bundle, and every language's measured accuracy is shown in the
-app, honestly.
+The browser interface is static. Analysis runs on your own machine through a
+local service, so text does not need to be sent to a remote API.
 
-## Layout
+## What it does
 
-Two self-contained trees — different package managers, different runtimes,
-insulated on purpose. Neither imports from the other; the one seam is HTTP.
+- Splits text into source-linked sentences, clauses, phrases, and words.
+- Supports multilingual parsing with on-demand language resources.
+- Shows parser provenance and confidence instead of hiding uncertainty.
+- Exports results as outline text, CSV, JSONL, CoNLL-U, or Anki content.
+- Provides the same local analysis through the web app, CLI, and TUI.
 
-```
-frontend/       the web app — SvelteKit 5 + Konsta UI (iOS theme), bun
-backend/        everything Node — pnpm workspace, installed independently
-  apps/server     the local service: pack registry, verified installs, analysis
-  apps/cli        `speechsplitter parse --format outline|csv|jsonl|anki …`
-  apps/tui        interactive terminal session (keeps the parser warm)
-  packages/pipeline       raw text → Tier 1 → LangChunk Tier 2 orchestration
-  packages/tier1-stanza   promoted production Python/Stanza runtime
-  packages/tier1-onnx     promoted production ONNX runtime
-  packages/tier1-agreement calibrated confidence from production runtimes
-  packages/packs        language-pack manifests + runtime selection, data only
-  packages/corrections  the human correction loop
-  tests/          the mirror suite: the frontend's three hand-copied files,
-                  checked against the published langchunk package by behaviour
-  dist-packs/     generated model registry + downloadable payload, served by
-                  the local server and intentionally not committed
-```
+The backend owns the complete production pipeline: raw text is segmented,
+analyzed by a Tier 1 parser, then passed to the standalone
+[`langchunk`](https://github.com/khizardevelops/langchunk) package for grammar
+extraction.
 
-## Running it
+## Get started
+
+Requirements: Node 20+, pnpm for the backend, and Bun for the frontend.
 
 ```bash
-cd backend
-pnpm install
-pnpm run build
-pnpm run server                  # local service on :8787
-
-cd ../frontend
-bun install
-bun run dev                      # the web app on :5173
+git clone https://github.com/khizardevelops/speechsplitter.git # get the standalone app
+cd speechsplitter/backend                                    # enter the local service
+pnpm install                                                  # install backend dependencies
+pnpm run build                                                # compile the service and CLI
+pnpm run server                                               # start analysis on port 8787
 ```
 
-The CLI and TUI need the Python bridge for the highest-accuracy parser:
+The local service is available at <http://localhost:8787>.
+Before parsing a language served by Stanza, complete the local bridge and model
+provisioning step below; starting the service itself does not download models.
+
+In another terminal, start the web application:
 
 ```bash
-cd backend
-pnpm run setup:stanza
-
-pnpm run tui
-pnpm run speechsplitter parse --lang en --format outline file.txt
+cd speechsplitter/frontend # enter the web application
+bun install                # install frontend dependencies
+bun run dev                # start the local development server
 ```
 
-## Verifying
+Open the URL Bun prints, normally <http://localhost:5173>.
+
+## CLI and TUI
+
+For the Stanza-powered parser, initialize the local Python bridge and download
+only the language models you plan to use:
 
 ```bash
-cd backend  && pnpm run verify   # typecheck + tests, incl. the mirror suite
-cd frontend && bun run check && bun run test:unit -- --run && bun run test:e2e
+cd backend                                  # run from the backend directory
+pnpm run setup:stanza                       # install Python dependencies; no model download
+pnpm run model:download -- --language en,ru # store English and Russian models locally
+```
+
+Parsing never downloads models automatically. Model assets remain local under
+`backend/models/` and are ignored by Git.
+
+Then use either local interface:
+
+```bash
+pnpm run tui                                                  # interactive terminal interface
+pnpm run speechsplitter parse --lang en --format outline file.txt # parse a file from the CLI
+```
+
+## Project layout
+
+```text
+frontend/        Svelte web application, managed with Bun
+backend/
+  apps/          deployable entry points: server, CLI, and TUI
+  packages/      shared production pipeline, parsers, packs, and corrections
+  tests/         backend and frontend-contract coverage
+```
+
+The frontend and backend are intentionally separate runtimes. They communicate
+only over the local HTTP API.
+
+## Development
+
+```bash
+cd backend        # verify the service, CLI, and backend packages
+pnpm run verify
+
+cd ../frontend    # verify the web application
+bun run check     # Svelte and TypeScript checks
+bun run test:unit -- --run # frontend unit tests
+bun run test:e2e  # browser end-to-end tests
 ```
 
 ## License
 
-[AGPL-3.0](LICENSE). Whole-pipeline measurements and candidate-model experiments
-live in [speechsplitter-eval](https://github.com/khizardevelops/speechsplitter-eval);
-the MIT LangChunk package remains independently usable without this app.
+[AGPL-3.0](LICENSE)

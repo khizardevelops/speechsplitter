@@ -26,6 +26,17 @@ Thumbs.db
 .venv-stanza/
 .cache/
 
+# Local Stanza and transformer resources. Keep the directory layout, never the
+# heavyweight downloaded assets.
+/backend/models/*
+!/backend/models/README.md
+!/backend/models/stanza/
+/backend/models/stanza/*
+!/backend/models/stanza/.gitkeep
+!/backend/models/huggingface/
+/backend/models/huggingface/*
+!/backend/models/huggingface/.gitkeep
+
 # Built language packs (publish these to a static host)
 dist-packs/
 

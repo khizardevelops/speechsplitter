@@ -1,7 +1,7 @@
 /**
- * SpeechSplitter production Tier 1 agreement — honest confidence from a second opinion.
+ * Tier 1 agreement — honest confidence from a second opinion.
  *
- * Every unit LangChunk emits carries a `Confidence`, and until now that number
+ * Every unit langchunk emits carries a `Confidence`, and until now that number
  * was a lie in the shipped path: Stanza exposes no per-token probability, so
  * `StanzaAnalyzer` reports 1.0 for everything and every clause renders as
  * `high` (`decisions.md` §V4-27). `UpdatedPlan.md` §10 forbids precisely this —

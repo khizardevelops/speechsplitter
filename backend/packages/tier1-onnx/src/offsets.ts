@@ -1,7 +1,7 @@
 /**
  * Recovering character offsets from a byte-level BPE tokenizer.
  *
- * Every span LangChunk emits must index the user's original text exactly, so the
+ * Every span langchunk emits must index the user's original text exactly, so the
  * subword tokens have to be mapped back to character ranges. transformers.js
  * does not expose an offset mapping, which leaves two candidate strategies.
  *

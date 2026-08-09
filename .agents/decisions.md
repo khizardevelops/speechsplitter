@@ -31,11 +31,17 @@ behaviour under the app.
 
 ## A6. Production Tier 1 is app-owned; evaluation comes first
 
-2026-08-08: LangChunk now accepts portable Tier 1 output and never executes a
-model. SpeechSplitter owns `backend/packages/tier1-*` and the raw-text pipeline
-that invokes them. `speechsplitter-eval` owns candidate counterparts, heavy
-model/corpus state, and Gates 2/3. Promotion is an explicit copy after a
-recorded evaluation; the app must not depend on evaluator source at runtime.
+2026-08-08: langchunk now accepts portable Tier 1 output and never executes a
+model. speechsplitter owns `backend/packages/tier1-*` and the raw-text pipeline
+that invokes them. Candidate counterparts, heavy model/corpus state, and
+quality gates stay outside the application. Promotion is an explicit copy after
+a recorded evaluation; the app must not depend on external development source
+at runtime.
+
+Promotable Stanza, ONNX, and agreement package source, tests, and contracts
+mirror their candidate counterparts. Only application wiring and local asset
+provisioning may differ, so promotion is a small reviewed transfer rather than
+a redesign.
 
 ## A2. The frontend is one Konsta design system, two layouts (engine §V4-64–67)
 

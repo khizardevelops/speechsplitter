@@ -1,5 +1,5 @@
 /**
- * SpeechSplitter production ONNX Tier 1 on a quantized transformer.
+ * ONNX Tier 1 promotion-compatible runtime on a quantized transformer.
  *
  * docs/UpdatedPlan.md §6.2–§6.3 and §14 Stage 3. Loads a converted
  * `ud-goeswith` model (see `tools/model-convert`) and produces the same

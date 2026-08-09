@@ -1,7 +1,7 @@
 {
   "name": "@speechsplitter/pipeline",
   "version": "1.0.0",
-  "description": "Production orchestration from text through a SpeechSplitter Tier 1 runtime into LangChunk Tier 2.",
+  "description": "Production orchestration from text through a speechsplitter Tier 1 runtime into langchunk Tier 2.",
   "type": "module",
   "private": true,
   "exports": {

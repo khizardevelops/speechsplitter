@@ -1,16 +1,15 @@
-# Historical LangChunk — Plan v4: An Executable Neural-Core / Rule-Layer Hybrid
+# Historical langchunk — Plan v4: An Executable Neural-Core / Rule-Layer Hybrid
 
 > This pre-split engineering plan is retained for historical context only. The
 > application is now **speechsplitter**; `langchunk` is its separate MIT npm
 > dependency. The repository root `README.md` and `LICENSE` supersede any old
 > product-name or licensing statements in this document.
 >
-> **Ownership after the Tier 1/Tier 2 refactor:** LangChunk is now a standalone
+> **Ownership after the Tier 1/Tier 2 refactor:** langchunk is now a standalone
 > Tier 2 package that accepts portable dependency analysis and never executes a
-> model. `speechsplitter-eval` owns experimental Tier 1 runtimes, models,
-> corpora, and whole-pipeline evaluation. SpeechSplitter owns separately
-> promoted production Tier 1 runtimes plus raw-text orchestration. Names and
-> paths in the historical stages below predate that split.
+> model. speechsplitter owns its production Tier 1 runtimes plus raw-text
+> orchestration. Names and paths in the historical stages below predate that
+> split.
 
 ## 0. Status of This Document
 
@@ -61,7 +60,7 @@ This is the active implementation plan. It **supersedes** `HybridApproach.v3.md`
 and `proposed_plan.md`.
 
 It **does not replace** `ProjectInfo.md`. That remains the product's source of
-truth for *what* LangChunk must output. Where this document and `ProjectInfo.md`
+truth for *what* langchunk must output. Where this document and `ProjectInfo.md`
 appear to disagree, `ProjectInfo.md` wins.
 
 **What v3 got right and this document keeps unchanged:** the diagnosis of why a
@@ -96,7 +95,7 @@ The four structural changes:
    prove the system first. §17 records the full Pashto plan so it can be resumed
    without re-derivation.
 
-**Licensing is resolved.** LangChunk is a personal, open-source, non-commercial
+**Licensing is resolved.** langchunk is a personal, open-source, non-commercial
 project. Every Universal Dependencies treebank and every pretrained model
 referenced here is therefore usable without restriction. Appendix B records the
 one-paragraph reasoning and what would have to change if that decision ever
@@ -136,7 +135,7 @@ them turns out false, the fallback is already named.
 
 ## 1. Executive Summary
 
-LangChunk breaks natural-language text into a nested Sentence → Clause → Phrase →
+langchunk breaks natural-language text into a nested Sentence → Clause → Phrase →
 Word structure, offline, in a browser, across many languages.
 
 The architecture is two tiers:
@@ -146,7 +145,7 @@ The architecture is two tiers:
   genuinely ambiguous, structural part of the problem and it should be learned
   from data, not hand-written.
 - **Tier 2 — Deterministic Grammar-to-Taxonomy Layer.** Given a correct
-  dependency tree, converting it into LangChunk's Word/Phrase/Clause/Sentence
+  dependency tree, converting it into langchunk's Word/Phrase/Clause/Sentence
   taxonomy is a *deterministic transformation*, because the taxonomy is a fixed
   designed scheme rather than an ambiguous natural phenomenon. This is plain
   TypeScript, identical for every language, configured per language only for
@@ -247,10 +246,10 @@ model. Make the well-defined, designed part of the problem the job of
 deterministic rules.**
 
 Dependency parsing under Universal Dependencies — a mature formalism covering
-193 languages — already produces exactly the information LangChunk's taxonomy
+193 languages — already produces exactly the information langchunk's taxonomy
 needs:
 
-| LangChunk needs to know... | UD already encodes this as... |
+| langchunk needs to know... | UD already encodes this as... |
 |---|---|
 | Is this a multi-word lexical unit? | `compound`, `flat`, `fixed`, `goeswith` relations between tokens |
 | What are this phrase's boundaries and type? | A token's subtree of non-clausal dependents (`det`, `amod`, `obj`, `case`, …) |
@@ -260,7 +259,7 @@ needs:
 
 Once Tier 1 hands over a correct dependency tree, **Tier 2's job is
 re-expression, not disambiguation.** The hard ambiguity has already been
-resolved. Tier 2 walks the resolved tree and relabels it into LangChunk's
+resolved. Tier 2 walks the resolved tree and relabels it into langchunk's
 vocabulary — a stable, language-general algorithm, parameterised per language
 only for surface details.
 
@@ -706,7 +705,7 @@ not a phrase; and a connector (`mark`, `cc`) is not a phrase of any type. See
 
 **7.5.3 Clause extraction**
 
-| LangChunk clause type | UD signal | Reference example |
+| langchunk clause type | UD signal | Reference example |
 |---|---|---|
 | Independent (root) | The `ROOT` predicate and its core arguments, not introduced by a subordinator | *"I go to the market every day"* |
 | Coordinated independent | `conj` between two clause-level predicates, joined by `cc` | *"and buy fresh vegetables"* |
@@ -894,7 +893,7 @@ langchunk/
   a library, so the Stage 5 web app runs the identical pipeline with a different
   analyzer plugged in instead of reimplementing it and drifting.
 - **`grammar/src` is split `ud/` | `taxonomy/` | `decode/`**, which is the real
-  conceptual seam: reading Universal Dependencies, and producing LangChunk's
+  conceptual seam: reading Universal Dependencies, and producing langchunk's
   taxonomy. `decode/` is Tier 1's algorithm living in a zero-dependency package
   because that is the only place both Node and browser can reach it.
 - **`grammar` and `segment` have zero runtime dependencies.** Not "few" — zero,
@@ -1114,7 +1113,7 @@ structural violations at a scale no hand-written fixture set reaches:
 - the document round-trips through the schema validator
 
 **(b) Exact expected-output fixtures.** The construction-coverage set from §11.2,
-where each fixture pairs a gold tree with the exact expected LangChunk units.
+where each fixture pairs a gold tree with the exact expected langchunk units.
 **Bar: 100%.** Any failure is triaged as either a Tier 2 bug (fix it) or a
 documented ambiguity (record the decision, §10).
 
@@ -1666,7 +1665,7 @@ running and it is honest about what it is.
 > When the weather is nice, we sit outside and watch the birds while talking
 > about our lives."*
 
-| Fragment | UD analysis | LangChunk clause type |
+| Fragment | UD analysis | langchunk clause type |
 |---|---|---|
 | "I go to the market every day" | `ROOT` predicate *go* with subject *I* | Independent |
 | "and buy fresh vegetables" | *buy* → *go* via `conj`; *and* via `cc` | Coordinated independent |
@@ -1679,7 +1678,7 @@ running and it is honest about what it is.
 And with an overt governing verb — *"She mentioned that her daughter is getting
 married next month"*:
 
-| Fragment | UD analysis | LangChunk clause type |
+| Fragment | UD analysis | langchunk clause type |
 |---|---|---|
 | "that her daughter is getting married next month" | *getting married* → *mentioned* via `ccomp`; *that* via `mark` | Dependent — complement |
 
@@ -1709,7 +1708,7 @@ Phrase-level extraction compose without separate logic.
 
 ## Appendix B: Licensing
 
-**Resolved: LangChunk is a personal, open-source, non-commercial project.**
+**Resolved: langchunk is a personal, open-source, non-commercial project.**
 
 Consequences, in full:
 
@@ -1720,7 +1719,7 @@ Consequences, in full:
   inherit non-commercial terms from their training data.
 - **No license audit, no manifest tracking, no legal review is required.** v3's
   entire Appendix B workstream is removed.
-- Release LangChunk under a share-alike-compatible license (CC BY-NC-SA for data
+- Release langchunk under a share-alike-compatible license (CC BY-NC-SA for data
   and fixtures; a permissive or copyleft software license for code, at your
   preference).
 

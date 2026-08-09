@@ -1,4 +1,4 @@
-# Historical LangChunk Project Information
+# Historical langchunk Project Information
 
 > This pre-split engineering note is retained for historical context. The
 > application is now **speechsplitter** and its engine is the separate,
@@ -7,7 +7,7 @@
 
 ## One-Line Summary
 
-LangChunk is an offline-first multilingual parser that accepts natural language text in any language and breaks it into meaningful grammatical units: words, phrases, clauses, and sentences.
+langchunk is an offline-first multilingual parser that accepts natural language text in any language and breaks it into meaningful grammatical units: words, phrases, clauses, and sentences.
 
 ## Core Idea
 
@@ -28,7 +28,7 @@ The goal is to make grammar visible and reusable. A language learner, teacher, r
 
 A word is the smallest independent unit of language that carries meaning and can stand on its own in conversation.
 
-In LangChunk, a word should not be treated only as "characters between spaces." Some words are written as one piece, some are written with hyphens, and some are written as multiple terms that together represent one idea.
+In langchunk, a word should not be treated only as "characters between spaces." Some words are written as one piece, some are written with hyphens, and some are written as multiple terms that together represent one idea.
 
 Examples:
 
@@ -42,7 +42,7 @@ Examples:
 - `smartphone`
 - `check-in`
 
-The important idea is that LangChunk should identify meaningful lexical units, not merely split on whitespace.
+The important idea is that langchunk should identify meaningful lexical units, not merely split on whitespace.
 
 ### Word-Like Units And Compounds
 
@@ -98,7 +98,7 @@ Examples:
 
 #### Dictionary Rule
 
-If a multi-part expression has its own established meaning as a single entry, LangChunk should be able to treat it as one lexical unit. This matters especially for language learning, where users need to learn real usage rather than mechanical word boundaries.
+If a multi-part expression has its own established meaning as a single entry, langchunk should be able to treat it as one lexical unit. This matters especially for language learning, where users need to learn real usage rather than mechanical word boundaries.
 
 ### 2. Phrase
 
@@ -114,7 +114,7 @@ Examples:
 - `with fresh vegetables`
 - `about our lives`
 
-LangChunk should identify phrase types when possible, such as noun phrases, verb phrases, prepositional phrases, adjective phrases, and adverbial phrases.
+langchunk should identify phrase types when possible, such as noun phrases, verb phrases, prepositional phrases, adjective phrases, and adverbial phrases.
 
 ### 3. Clause
 
@@ -143,7 +143,7 @@ Example:
 
 This has a subject and action, but the listener still expects the rest of the sentence.
 
-LangChunk should identify both independent and dependent clauses, including coordinated clauses joined by words like `and`, `but`, and equivalents in other languages.
+langchunk should identify both independent and dependent clauses, including coordinated clauses joined by words like `and`, `but`, and equivalents in other languages.
 
 ### 4. Sentence
 
@@ -160,7 +160,7 @@ Examples:
 - `They studied.`
 - `Because the high school students studied hard, they passed the exam.`
 
-Sentences may be short, long, literary, conversational, formal, or fragmented. LangChunk should handle real-world text, not only clean textbook examples.
+Sentences may be short, long, literary, conversational, formal, or fragmented. langchunk should handle real-world text, not only clean textbook examples.
 
 ## Desired User Experience
 
@@ -219,7 +219,7 @@ This is important because input may include:
 
 ### 2. Multilingual
 
-LangChunk should support broad multilingual parsing.
+langchunk should support broad multilingual parsing.
 
 Long-term target:
 
@@ -257,7 +257,7 @@ The user should be able to paste a passage and get results quickly.
 
 ### 5. Extensible
 
-LangChunk should be easy to extend for new languages.
+langchunk should be easy to extend for new languages.
 
 A future contributor should be able to add:
 
@@ -275,7 +275,7 @@ The system should make it clear where language-specific knowledge belongs.
 
 ### Language Learning
 
-A learner pastes a favorite speech, dialogue, story, or article. LangChunk breaks it into sentences, clauses, and words. A learning app can then help the user study real examples from material they care about.
+A learner pastes a favorite speech, dialogue, story, or article. langchunk breaks it into sentences, clauses, and words. A learning app can then help the user study real examples from material they care about.
 
 Possible learning workflows:
 
@@ -305,9 +305,9 @@ A researcher or language enthusiast can inspect how a text is structured and com
 
 A writer can inspect long sentences, identify complex clauses, and understand where a sentence may be too dense.
 
-## What LangChunk Is Not
+## What langchunk Is Not
 
-LangChunk is not primarily:
+langchunk is not primarily:
 
 - a translator
 - a dictionary
@@ -363,7 +363,7 @@ Different languages vary in ways that affect parsing:
 - abbreviations
 - mixed-language text
 
-LangChunk should be designed with these differences in mind.
+langchunk should be designed with these differences in mind.
 
 ## Quality Evaluation
 
@@ -386,7 +386,7 @@ The examples in `test data/` should become part of a growing reference set.
 
 ### Phase 1: Define The Standard Output
 
-Define exactly what LangChunk should return for:
+Define exactly what langchunk should return for:
 
 - sentence
 - clause
@@ -454,7 +454,7 @@ Build workflows around the parser:
 
 ## Success Criteria
 
-LangChunk is successful if a user can paste a real text and quickly understand:
+langchunk is successful if a user can paste a real text and quickly understand:
 
 - where the sentences are
 - what the clauses are

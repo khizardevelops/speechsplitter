@@ -37,7 +37,30 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[3]
+# Each checkout keeps its own resources by deriving a local default from the
+# runtime package location; the parser itself remains promotion-compatible.
+# operators may override either location without changing parser behavior.
+MODEL_DIR = Path(os.environ.get("LANGCHUNK_STANZA_MODEL_DIR", ROOT / "models" / "stanza"))
+HUGGINGFACE_DIR = Path(
+    os.environ.get("LANGCHUNK_STANZA_HUGGINGFACE_DIR", ROOT / "models" / "huggingface")
+)
+PROCESSORS = "tokenize,pos,lemma,depparse"
+
+# Transformer-backed Stanza packages retrieve their backbones through the
+# Hugging Face cache. Keep that cache with the rest of the owning project's
+# ignored model assets instead of silently using a contributor's home directory.
+os.environ["HF_HOME"] = str(HUGGINGFACE_DIR)
+os.environ["HF_HUB_CACHE"] = str(HUGGINGFACE_DIR / "hub")
+
+
+class ModelNotInstalledError(RuntimeError):
+    """Raised when parsing requests a model that was not provisioned locally."""
 
 
 def eprint(*args: object) -> None:
@@ -47,7 +70,6 @@ def eprint(*args: object) -> None:
 def build_pipeline(lang: str, package=None):
     import stanza
 
-    processors = "tokenize,pos,lemma,depparse"
     # `package` selects which treebank the models were trained on, and may be a
     # name or a per-processor map. The map matters: Stanza's transformer-backed
     # variants exist only for some processors, so `ewt_electra-large` is a valid
@@ -56,7 +78,8 @@ def build_pipeline(lang: str, package=None):
     try:
         return stanza.Pipeline(
             lang=lang,
-            processors=processors,
+            dir=str(MODEL_DIR),
+            processors=PROCESSORS,
             **extra,
             tokenize_no_ssplit=True,
             download_method=None,
@@ -68,23 +91,15 @@ def build_pipeline(lang: str, package=None):
         # is an environment problem, not a missing Stanza model: downloading
         # again cannot fix it and wastes a large first-run download.
         raise
-    except Exception:
-        # First run for this language: fetch the models, then retry. This is the
-        # only step that touches the network, it happens once per language, and
-        # the result is cached in ~/stanza_resources.
-        eprint(f"[stanza-bridge] downloading models for '{lang}'"
-               f"{f' ({package})' if package else ''} (one time)...")
-        stanza.download(lang, processors=processors, package=package,
-                        logging_level="ERROR", verbose=False)
-        return stanza.Pipeline(
-            lang=lang,
-            processors=processors,
-            **extra,
-            tokenize_no_ssplit=True,
-            download_method=None,
-            logging_level="ERROR",
-            verbose=False,
-        )
+    except Exception as error:
+        # Parsing is deliberately network-free. Models are provisioned by
+        # `pnpm run model:download`, not as an incidental side effect of a
+        # parser command. This makes the selected model explicit and keeps all
+        # resources inside the owning project's ignored model directory.
+        raise ModelNotInstalledError(
+            f"Stanza model for '{lang}' is not installed in {MODEL_DIR}.\n"
+            f"  pnpm run model:download -- --language {lang}"
+        ) from error
 
 
 def misc_with_offsets(token, base: int) -> str:
@@ -194,8 +209,10 @@ def serve() -> int:
         except ImportError as error:
             response = {
                 "error": f"ImportError: {error}. Run `pnpm run setup:stanza` "
-                "from speechsplitter/backend to install the bridge dependencies."
+                "from this project to install the bridge dependencies."
             }
+        except ModelNotInstalledError as error:
+            response = {"error": str(error)}
         except Exception as error:  # noqa: BLE001 - reported to the Node side
             response = {"error": f"{type(error).__name__}: {error}"}
         # One response per line, flushed, or the caller waits forever.
@@ -238,6 +255,9 @@ def main() -> int:
             "  pnpm run setup:stanza"
         )
         return 3
+    except ModelNotInstalledError as error:
+        eprint(f"[stanza-bridge] {error}")
+        return 4
     except Exception as error:  # noqa: BLE001 - surfaced to the Node side verbatim
         eprint(f"[stanza-bridge] could not start the pipeline: {error}")
         return 4
